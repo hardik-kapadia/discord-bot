@@ -29,6 +29,6 @@ async def on_member_join(member):
     print("rule sent")
     await member.send(content=RULES)
     
-token = os.environ("TOKEN")
+token = os.environ["TOKEN"]
 
 client.run(token)
