@@ -1,7 +1,7 @@
 import discord
 from discord import member, channel
 import time
-# import os
+import os
 import random
 # from discord.ext import commands
 
@@ -28,5 +28,7 @@ async def on_member_join(member):
     await member.edit(nick="tylerDurden")
     print("rule sent")
     await member.send(content=RULES)
+    
+token = os.environ("TOKEN")
 
-client.run('ODQ3ODA5ODM2ODYyNjY4ODEx.YLDecA.9mIsz67o4n_pqq69hiKpQBigWF0')
+client.run(token)
