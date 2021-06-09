@@ -20,7 +20,8 @@ reactions = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "
 @client.event
 async def on_ready():
     print("hello there")
-    
+
+
 @client.event
 async def on_message(message):
     if message.author == client.user:
@@ -28,7 +29,7 @@ async def on_message(message):
 
     if message.content.startswith("-poll"):
         nxt = message.split(" ")[1]
-        
+
         print(nxt)
 
 
@@ -38,7 +39,8 @@ async def on_member_join(member):
     await member.edit(nick="tylerDurden")
     print("rule sent")
     await member.send(content=RULES)
-    
+
+
 @client.event
 async def on_message(message):
     if message.author == client.user:
@@ -46,20 +48,51 @@ async def on_message(message):
 
     emojis_to_add = []
 
-    if message.content.startswith("-poll"):
-        nxt = message.content.split(" ")
+    if message.content.startswith("!poll"):
+        nxt = message.content.split(",")
         msg = "Add Reactions:\n"
+        opt1 = nxt[0].split(" ")
+        opt = opt1[1]
+        nxt.insert(1, opt)
+        nxt.pop(0)
 
-        for i in range(1, len(nxt)):
-            msg += str(i) + ". " + nxt[i] + "\n"
-            emojis_to_add.append(reactions[i-1])
+        print(nxt)
+        options = []
+
+        for i in range(0, len(nxt)):
+            options.append(nxt[i].strip())
+            msg += str(i+1) + ". " + nxt[i].strip() + "\n"
+            emojis_to_add.append(reactions[i])
 
         print(msg)
+        print("options...", options)
 
         message_ = await message.channel.send(msg)
+        id = message_.id
         for emoji in emojis_to_add:
             await message_.add_reaction(emoji)
-    
+
+        time.sleep(15)
+
+        _message = await message.channel.fetch_message(id)
+        reactions_ = _message.reactions
+        print(_message.content)
+        max = 1
+        winner = ""
+        j = 0
+        for reaction in reactions_:
+            if reaction.count > max:
+                print("winning reaction:", reaction)
+                winner = options[j]
+            j += 1
+
+        congrats = "And the winner is: " + winner
+
+        if winner == "":
+            congrats = "It's a Tie"
+
+        await message.channel.send(congrats)
+
 token = os.environ["TOKEN"]
 
 client.run(token)
