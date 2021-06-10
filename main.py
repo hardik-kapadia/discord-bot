@@ -72,24 +72,39 @@ async def on_message(message):
         for emoji in emojis_to_add:
             await message_.add_reaction(emoji)
 
-        time.sleep(15)
+        time.sleep(45)
 
         _message = await message.channel.fetch_message(id)
         reactions_ = _message.reactions
         print(_message.content)
         max = 1
+        tie = False
         winner = ""
+        winners = []
         j = 0
         for reaction in reactions_:
             if reaction.count > max:
                 print("winning reaction:", reaction)
                 winner = options[j]
+                winners.append(winner)
+            elif reaction.count == max:
+                tie = True
+                winners.append(winner)
+                
             j += 1
 
         congrats = "And the winner is: " + winner
 
         if winner == "":
-            congrats = "It's a Tie"
+            congrats = "Nobody won!"
+        
+        if tie:
+            congrats = "Tie between"
+            for win in winners:
+                congrats += " "+win
+            
+            congrats += "."    
+            
 
         await message.channel.send(congrats)
 
