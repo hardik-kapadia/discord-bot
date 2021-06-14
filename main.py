@@ -89,25 +89,25 @@ async def on_message(message):
                 print("winning reaction:", reaction)
                 winner = options[j]
                 winners.append(winner)
+                max = reaction.count
             elif reaction.count == max:
                 tie = True
                 winners.append(options[j])
-                
+
             j += 1
 
         congrats = "And the winner is: " + winner
 
         if winner == "":
             congrats = "Nobody won!"
-        
+
         if tie:
             congrats = "Tie between"
             for win in winners:
                 congrats += " "+win+","
-            
+
             congrats = congrats - congrats[-1]
-            congrats += "."    
-            
+            congrats += "."
 
         await message.channel.send(congrats)
 
