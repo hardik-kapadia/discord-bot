@@ -86,7 +86,7 @@ async def on_message(message):
             if reaction.count > max:
                 print("winning reaction:", reaction)
                 winner = options[j]
-                winners.append(winner)
+                # winners.append(winner)
             elif reaction.count == max:
                 tie = True
                 winners.append(winner)
