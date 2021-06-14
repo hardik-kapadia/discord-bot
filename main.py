@@ -84,12 +84,14 @@ async def on_message(message):
         j = 0
         for reaction in reactions_:
             if reaction.count > max:
+                tie = False
+                winners.clear()
                 print("winning reaction:", reaction)
                 winner = options[j]
-                # winners.append(winner)
+                winners.append(winner)
             elif reaction.count == max:
                 tie = True
-                winners.append(winner)
+                winners.append(options[j])
                 
             j += 1
 
@@ -101,8 +103,9 @@ async def on_message(message):
         if tie:
             congrats = "Tie between"
             for win in winners:
-                congrats += " "+win
+                congrats += " "+win+","
             
+            congrats = congrats - congrats[-1]
             congrats += "."    
             
 
