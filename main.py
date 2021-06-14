@@ -106,7 +106,7 @@ async def on_message(message):
             for win in winners:
                 congrats += " "+win+","
 
-            congrats = congrats - congrats[-1]
+            congrats = congrats[:-1]
             congrats += "."
 
         await message.channel.send(congrats)
