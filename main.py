@@ -96,7 +96,7 @@ async def on_message(message):
             if(par == 'category'):
                 msg_ = "The categories are: \n"
                 for i in range(len(categories)):
-                    msg_ += str(i+1)+". "+categories[i]
+                    msg_ += str(i+1)+". "+categories[i]+"\n"
 
                 msg_ += "\n\n Use this as:\n!funny category:memes"
                 await message.channel.send(msg_)
