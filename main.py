@@ -3,6 +3,8 @@ from discord import member, channel
 import time
 import os
 import random
+from bs4 import BeautifulSoup
+import requests
 # from discord.ext import commands
 
 intents = discord.Intents.default()
@@ -16,21 +18,55 @@ RULES = "Gentlemen, welcome to Fight Club. \nThe first rule of Fight Club is: Yo
 
 reactions = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
 
+categories = ['cars', 'animals-nature', 'anime-manga', 'art-creative', 'celebrities', 'gaming',
+              'girls', 'internet', 'memes', 'movies', 'other', 'science-tech', 'sports', 'tv-shows']
+lengths = ['day', 'week', 'month', 'year']
+
+
+def get_media(link):
+    sources = requests.get(link).text
+
+    soup = BeautifulSoup(sources, 'lxml')
+
+    post_m = soup.find('div', class_="post__media")
+
+    img = post_m.a['href']
+    img_ = img.split('/')
+    print(img_)
+    if(img_[1] == 'video'):
+        link = 'https://ifunny.co'+img
+        print('link:', link)
+        src = requests.get(link).text
+
+        souper = BeautifulSoup(src, 'lxml')
+
+        vid = souper.find(
+            'div', class_='media media_fun js-media js-playlist-media')['data-source']
+
+        print(vid)
+        return vid
+        # print('way down: ', vid_)
+    elif (img_[1] == 'picture'):
+        img_p = post_m.a.img['data-src']
+        print('Here', img_p)
+        return img_p
+
+
+def get_top(length):
+    return get_media('https://ifunny.co/top-memes/'+length)
+
+
+def get_cat(cat):
+    return get_media('https://ifunny.co/'+cat)
+
+
+def get_query(query):
+    return get_media('https://ifunny.co/tags/'+query)
+
 
 @client.event
 async def on_ready():
     print("hello there")
-
-
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-
-    if message.content.startswith("-poll"):
-        nxt = message.split(" ")[1]
-
-        print(nxt)
 
 
 @client.event
@@ -48,7 +84,47 @@ async def on_message(message):
 
     emojis_to_add = []
 
-    if message.content.startswith("!poll"):
+    if message.content.startswith("!funny"):
+        print('gotcha')
+        h = message.content.split(' ')
+        h1 = h[1].split(':')
+
+        print('h', h)
+        print('h1 -', h1)
+
+        type_ = h1[0].strip()
+        try:
+            if(type_ == 'category'):
+                print("it's category")
+                cat = h1[1].strip()
+                print('category:', cat)
+                if cat in categories:
+                    msg = get_cat(cat)
+                    print('link: ', msg)
+                    await message.channel.send(msg)
+            elif(type_ == 'top'):
+                print("it's top")
+                _len = h1[1].strip()
+                print('length:', _len)
+                if(_len == ''):
+                    _len = 'day'
+                if _len in lengths:
+                    msg = get_top(_len)
+                    print('link: ', msg)
+                    await message.channel.send(msg)
+            elif(type_ == 'tags'):
+                print("it's tag")
+                tag = h1[1].strip()
+                print('tag:', tag)
+                if(tag == ''):
+                    await message.channel.send("Don't do this")
+                msg = get_query(tag)
+                print('link: ', msg)
+                await message.channel.send(msg)
+        except:
+            await message.channel.send('Error :(')
+
+    elif message.content.startswith("!poll"):
         nxt = message.content.split(",")
         msg = "Add Reactions:\n"
         opt1 = nxt[0].split(" ")
