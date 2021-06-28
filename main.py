@@ -87,6 +87,25 @@ async def on_message(message):
     if message.content.startswith("!funny"):
         print('gotcha')
         h = message.content.split(' ')
+        if(h[1] == 'help' and len(h) <= 2):
+            msg_ = "Here's how to use the bot:\n!funny <type>:<parameter>\n\nThe three types are: \n1. 'category'\n2. 'top'\n3. 'tags'\n\n use !funny help <type> for help with parameters"
+            await message.channel.send(msg_)
+        elif(h[1] == 'help' and len(h) == 3):
+            par = h[2]
+
+            if(par == 'category'):
+                msg_ = "The categories are: \n"
+                for i in range(len(categories)):
+                    msg_ += str(i+1)+". "+categories[i]
+
+                msg_ += "\n\n Use this as:\n!funny category:memes"
+                await message.channel.send(msg_)
+            elif(par == 'top'):
+                msg_ = 'You can get top memes of the day, week, month or year.\n Use this as:\n!funny top:day'
+                await message.channel.send(msg_)
+            elif(par == 'tags'):
+                msg_ = 'This acts like a search bar, simply type in your query as this:\n!funny tags:<query>'
+                await message.channel.send(msg_)
         h1 = h[1].split(':')
 
         print('h', h)
