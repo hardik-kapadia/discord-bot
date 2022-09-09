@@ -1,8 +1,6 @@
 import discord
-from discord import member, channel
 import time
 import os
-import random
 from bs4 import BeautifulSoup
 import requests
 # from discord.ext import commands
@@ -19,7 +17,7 @@ RULES = "Gentlemen, welcome to Fight Club. \nThe first rule of Fight Club is: Yo
 reactions = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
 
 categories = ['cars', 'animals-nature', 'anime-manga', 'art-creative', 'celebrities', 'gaming',
-              'girls', 'internet', 'memes', 'movies', 'other', 'science-tech', 'sports', 'tv-shows']
+            'girls', 'internet', 'memes', 'movies', 'other', 'science-tech', 'sports', 'tv-shows']
 lengths = ['day', 'week', 'month', 'year']
 
 
